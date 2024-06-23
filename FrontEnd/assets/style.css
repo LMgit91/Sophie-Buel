@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	background-color: rgb(250, 243, 234);
 }
 ol, ul {
 	list-style: none;
@@ -135,11 +136,10 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
 #contact {
 	width: 50%;
-margin: auto;
+    margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -186,3 +186,296 @@ footer nav ul {
 	margin: 2em
 }
 
+/*Début*/
+.hidden1{
+	visibility: hidden;
+}
+.hide{
+	display: none;
+}
+.show{
+	display: block;
+}
+.btn1{
+    border-radius: 20px;
+	padding: 5px 13px 5px 13px;
+	color: #1D6154;
+}
+#btnConnect:hover{
+    background-color: #1D6154;
+	color: white;
+}
+.flex{
+	display: flex;
+}
+.filtre{
+    justify-content: center;
+	column-gap: 10px;
+	font-size: 20px;
+	margin-bottom: 30px;
+}
+.filtre button{
+	border: 1px solid #1D6154;
+	cursor: pointer;
+	font-weight: bold;
+}
+.filtre button:active{
+	background-color: green;
+	color: white;
+}
+.pointeur{
+	cursor: pointer;
+}
+.loginStyle{
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 170px;
+}
+#logT{
+	font-size: 24px;
+	color: #1D6154;
+	text-align: center;
+	margin-bottom: 20px;
+}
+.loginStyle label{
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+.loginStyle input{
+	width: 250px;
+	height: 35px;
+	border: transparent;
+	box-shadow: 2px 2px 2px rgb(189, 180, 180);
+}
+#mot:hover{
+    text-decoration: underline;
+}
+#btnConnect{
+	width: 55%;
+	margin-bottom: 20px;
+	align-items: center;
+	background-color: #1D6154;
+	color: white;
+	cursor: pointer;	
+}
+#mot{
+	width: 100%;
+	text-align: center;
+}
+.buttonMotdepasse{
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+#modification2{
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+}
+#mod{
+	display: flex;
+	gap: 10px;
+	font-size: 15px;
+	padding-top: 8px;
+	
+}
+.modalBackground{
+	background-color: rgba(0, 0, 0, 0.5);
+}
+#mod i{
+	cursor: pointer;
+}
+
+#modale{
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.5);
+	height: 100%;
+	width: 100%;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#modale2{
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	z-index: 1;
+	width: 30%;
+	height:68%;
+	border-radius: 10px;
+}
+#p1{
+	text-align: end;
+	padding-right: 10px;
+	padding-top: 10px;
+	font-size: 25px;
+	margin-bottom: 0;
+	cursor: pointer;
+}
+#p2{
+	text-align: center;
+	font-size: 25px;
+	margin-bottom: 22px;
+}
+#btn2{
+    border-radius: 15px;
+	width: 40%;
+	background-color: #1D6154;
+	color: white;
+	height: 30px;
+	border: transparent;
+	cursor: pointer;
+}
+.boutonModal{
+	display: flex;
+	justify-content: center;
+}
+#gallery2{
+	width: 80%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-column-gap: 4px;
+	grid-row-gap: 11px;
+	justify-self: center;
+	border-bottom: 1px solid rgb(165, 160, 160);
+	padding-bottom: 40px;
+	
+}
+.gallery2{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	padding-left: 0;
+	padding-right: 0;
+	margin-bottom: 30px;
+}
+#gallery2 img{
+	width: 100%;
+}
+
+#gallery2 i{
+	position: relative;
+	color: white;
+	background-color: black;
+	padding: 3px;
+	left: 68px;
+	top: 23px;
+	font-size: 10px;
+	cursor: pointer;
+}
+
+#modalConteneur2 form{
+	height: 100%;
+}
+#nav1{
+	justify-content: space-between;
+	align-items: center;
+	padding: 30px;
+}
+
+#ajoutPhoto{
+	text-align: center;
+	font-size: 25px;
+	padding-bottom: 20px;
+}
+
+#ajoutImage{
+	width: 70%;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	background-color: rgb(171, 236, 238);
+	justify-content: center;
+	align-items: center;
+	height: 25%;
+	padding-top: 0;
+}
+#previous{
+	font-size: 30px;
+}
+#close{
+	font-size: 30px;
+}
+#modalConteneur2 form{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+#modalConteneur2{
+	height: 100%;
+}
+#button1{
+    border-radius: 20px;
+    height: 22%;
+    width: 45%;
+    color: rgb(63, 135, 163);
+    border: transparent;
+	background-color: rgb(206, 203, 203);
+}
+#ajoutImage i{
+    color: rgb(206, 203, 203);
+	font-size: 70px;
+}
+#modalConteneur2 #ajoutImage label{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#modalConteneur2 input{
+	width: 70%;
+	border: transparent;
+	box-shadow: 2px 2px 2px gainsboro;
+	height: 45px;
+}
+
+#pinfo{
+	font-size: 10px;
+}
+.label1{
+	width: 70%;
+	text-align: start;
+	padding-top: 30px;
+}
+#categoryInput{
+    margin-top: 2px;
+    margin-bottom: 30px;
+    width: 70%;
+	border: transparent;
+	box-shadow: 2px 2px 2px gainsboro;
+	height: 45px;
+}
+ #button2{
+	margin-top: 30px;
+	width: 50%;
+	border-radius: 20px;
+	height: 35px;
+	background-color: gray;
+	color: white;
+	border: transparent;
+}
+#update{
+	display: none;
+}
+#gallery2 span{
+	background-color: black;
+	position: relative;
+	left: 68px;
+	top: 23px;
+	font-size: 15px;
+	cursor: pointer;
+	color: white;
+}
+#ajoutImage .imageConteneur{
+	display: flex;
+	justify-content: center;
+	width: 30%;
+	height: 100%;
+	margin-top: 0;
+	margin-bottom: 0;
+	object-fit: cover;
+}
