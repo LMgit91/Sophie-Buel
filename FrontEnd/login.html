@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<title>Sophie Bluel - Architecte d'intérieur</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
+	<meta name="description" content="">
+	<link rel="stylesheet" href="./assets/style.css">
+	<script src="https://kit.fontawesome.com/1a4fb47656.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+    <nav>
+      <ul>
+        <li>projets</li>
+        <li>contact</li>
+        <li id="log" class="pointeur">login</li>
+        <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+      </ul>
+    </nav>
+  </header>   
+  <main>
+    <div class="loginStyle flex"> 
+      <form  id="form" action="http://localhost:5678/api/users/login" method="post">
+        <p id="logT">Log In</p>
+        <label class="flex"for="email1">E-mail<input type="email" id="email1" name="email" required/></label>
+        <label class="flex"for="password1">Mot de passe<input type="password" id="password1" name="password" minlength="6" required /></label>
+        <div class="flex buttonMotdepasse">
+          <button class="btn1" id="btnConnect" onclick="loginAd2()" type="submit">Se connecter</button>
+          <span id="mot">Mot de passe oublié</span>
+        </div>
+      </form>
+    </div>  
+  </main>
+  <script> 
+const loginAd2 = async(e) => {
+  const email1 = document.getElementById('email1');
+  const password1 = document.getElementById('password1');
+  const modifi = document.getElementById('mod');
+      fetch("http://localhost:5678/api/users/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"}, 
+        body: JSON.stringify({"email" : `${email1.value}`, "password" : `${password1.value}`})
+        }).then(response => response.json()).then(data => {
+            if(data.token && data.userId){
+              window.localStorage.setItem("token", data.token);
+              window.location.href ="index.html";
+            }else if(email1.value === "" || password1.value === ""){
+              alert("Ces champs doivent remplis");
+            }else if(!data.token || !data.userId){
+              window.location.href = "login.html";
+              alert("Your email or password is wrong");
+            }  
+          });
+}
+const login = document.getElementById("log");
+login.addEventListener('click', () => {
+  localStorage.clear();
+  if(window.location.href = "login.html"){
+    window.location.href = "index.html";
+  }
+});
+  </script> 
+</body>
+</html>
