@@ -91,22 +91,28 @@ const filtre = async() =>{
    }).catch(error => console.log(error))
 };
 filtre();
-     //Création d'une fonction de rechargement de la page et d'une fonction de supression de la page modale.
-    function recharge(){ 
-      fetch("http://localhost:5678/api/works").then(res => res.json()).then((data) =>{
+//Création d'une fonction de rechargement de la page et d'une fonction de supression de la page modale.
+function recharge(){ 
+   fetch("http://localhost:5678/api/works").then(res => res.json()).then((data) =>{
       const gallery = document.querySelector("section .gallery");
          data.map((item) =>{
-         const gallery2 = document.getElementById('gallery2');
+            const gallery2 = document.getElementById('gallery2');
             if(gallery2){
                gallery2.innerHTML += `
                 <div class="${item.id}">
-                 <span onclick="delete1(event)">&#x1F5D1;</span>
+                 <span class="deleteR">&#x1F5D1;</span>
                  <img src= "${item.imageUrl}" alt= "${item.title}" />
                 </div>
                 `;
-                }
-           });})
-         }
+      
+            }
+         });
+      const element1 = document.querySelectorAll(".deleteR");
+      for(let i = 0; i < element1.length; i++){
+         element1[i].addEventListener("click", delete1);
+      }
+   })
+}
 function fermeture(element){
    element.addEventListener("click", () => {
       const gallery2 = document.getElementById('gallery2');
@@ -117,7 +123,7 @@ function fermeture(element){
          }
       });  
     }    
-     
+/*AddEventListener pour le login*/     
 login.addEventListener('click', () => {
    localStorage.clear();
    if(window.location.href = "index.html"){
@@ -156,7 +162,7 @@ if(localStorage.getItem("token")){
     <div class="boutonModal"><button id="btn2" onclick="ajoutDePhoto()">Ajouter une photo</button></div>
     </div>
     `
-    /*Fonction qui permet de voir le formulaire qui ajoute une image*/
+/*Fonction qui permet de voir le formulaire qui ajoute une image*/
 
 const ajoutDePhoto = () => {
    const partie1 = document.getElementById("modalConteneur1");
@@ -167,11 +173,11 @@ const ajoutDePhoto = () => {
                <p class="pointeur" id="previous"><i class="fa-solid fa-arrow-left"></i></p>
                <p class="pointeur" id="close">&times;</p>
             </div>
-            <form action="http://localhost:5678/api/works" method="POST" enctype="multipart/form-data">
+            <form action="http://localhost:5678/api/works/post" method="POST" enctype="multipart/form-data">
                <p id="ajoutPhoto">Ajout photo</p>
                <div id="ajoutImage">
                   <i class="fa-regular fa-image"></i>
-                  <label for="update" id="button1" onclick="photo()">+ Ajouter photo</label>
+                  <label for="update" id="button1">+ Ajouter photo</label>
                   <input type="file" id="update" />
                   <p id="pinfo">jpg, png : 4mo max</p>
                </div>
@@ -185,7 +191,7 @@ const ajoutDePhoto = () => {
                   <option value="1">Objets</option>
                   <option value="3">Hotels & restaurants</option>
                </select>
-               <button id="button2" onclick="AjoutContenu()" type="submit">Valider</button>
+               <button id="button2" type="submit">Valider</button>
             </form>
          </div>
          `
@@ -206,6 +212,10 @@ const previous = document.getElementById("previous");
          const closeModal = document.getElementById("p1");
          fermeture(closeModal);
       });
+const form = document.querySelector("form");
+   form.addEventListener("submit", AjoutContenu);
+const photo = document.getElementById('button1');
+   photo.addEventListener('click', photo2)
    }
 //Fermeture de la modale quand je clique sur l'icon.
 const close = document.getElementById("close");
@@ -222,7 +232,7 @@ icon1.addEventListener('click', () => {
     
 const closeModal = document.getElementById("p1");
    fermeture(closeModal);
-      
+ 
 function delete1(e){
    const f = document.querySelectorAll(".gallery figure");
    e.target.parentElement.remove();
@@ -231,9 +241,9 @@ function delete1(e){
             f[i].remove();
          }
       }
-      /*fetch("http://localhost:5678/api/works", {
+      fetch("http://localhost:5678/api/works/" + e.target.parentElement.className, {
          method: "DELETE",
-         headers: {"Authorization": `Bearer ${localStorage.getItem("token")}`}
+         headers: {Authorization: "Bearer " + localStorage.getItem("token")},
       }).then(response => response.json()).then(data => {
          for(let i = 0; i < data.length; i++){
             if(e.target.parentElement.className === data[i].id){
@@ -242,11 +252,10 @@ function delete1(e){
            
          }
             
-      })*/
+      }).catch(err => console.log('L\'élément sélectionné à été efface'))
 }
       
-      
-function photo(){
+function photo2(){
    const input = document.getElementById("update");
    const conteneur = document.getElementById("ajoutImage");
    const button1 = document.querySelector("#ajoutImage label");
@@ -263,17 +272,27 @@ function photo(){
          input.disabled = true;
       })
 }
+      
+async function AjoutContenu(e){
+   e.preventDefault();
+   const form = document.querySelector("form");
+   const img = document.querySelector("#ajoutImage img");
+   const input = document.getElementById("update");
+   const inputValue1 = document.getElementById("titleInput").value;
+   const inputValue2 = document.querySelector("#categoryInput").value;
+   const formData = new FormData();
+   const imgFormat = new Blob([JSON.stringify(img)], { type: "application/octet-binary" });
+  // formData.append('image', input.files[0], "image.jpeg");
+   formData.append('image', imgFormat);
+   formData.append('title', inputValue1);
+   formData.append('category', inputValue2);
+     await fetch("http://localhost:5678/api/works/", {
+         method: "POST",
+         headers: {"accept" : "application/json", Authorization : "Bearer " + localStorage.getItem("token"), "Content-Type" : "multipart/form-data"},
+         body: formData,
+      } 
+      ).then(response => response.json()).then(data => console.log(data))
 
-      async function AjoutContenu(){
-         const img = document.querySelector("#ajoutImage img");
-         const inputValue1 = document.getElementById("titleInput");
-         const inputValue2 = document.querySelector("#categoryInput option")
-         await fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: {"accept" : "application/json", "Authorization" : `${localStorage.getItem("token")}`, "Content-Type" : "multipart/form-data"},
-            body: { "imageUrl": `${img}`, "title": `${inputValue1.value}`, "category": `${inputValue2.value}`}
-         }).then(response => response.json()).then(data => console.log(data));
-      }
-   
+   }
 
          
