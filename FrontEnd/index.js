@@ -250,7 +250,7 @@ async function delete1(e) {
        if (!response.ok) {
            throw new Error("La requête a échoué avec le statut : " + response.status)
        }else{
-           location.reload; 
+           location.reload(); 
            alert(`Le projet no: ${e.target.parentElement.className} à bien été effacé`);
        }   
    })
@@ -302,7 +302,7 @@ async function ajoutContenu(e){
         })
           .then((response) => {
             if(response.ok) {
-               location.reload;
+               location.reload();
                alert("Le nouveau projet a bien");
               return response.json();
             } else {
@@ -314,6 +314,6 @@ async function ajoutContenu(e){
           });
       };
       
-window.addEventListener("beforeunload", () => localStorage.clear());
+
 
          
