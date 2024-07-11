@@ -91,7 +91,7 @@ const filtre = async() =>{
    }).catch(error => console.log(error))
 };
 filtre();
-//Création d'une fonction de rechargement de la page et d'une fonction de supression de la page modale.
+//Création d'une fonction de rechargement de la page et de l'addEventListener qui déclenche l'action de supression des projets.
 function recharge(){ 
    fetch("http://localhost:5678/api/works").then(res => res.json()).then((data) =>{
       const gallery = document.querySelector("section .gallery");
@@ -113,6 +113,7 @@ function recharge(){
       }
    })
 }
+//Foction de fermeture de la modale par le clique de l'icon de fermeture.
 function fermeture(element){
    element.addEventListener("click", () => {
       const gallery2 = document.getElementById('gallery2');
@@ -123,7 +124,8 @@ function fermeture(element){
          }
       });  
     }    
-/*AddEventListener pour le login*/     
+
+/*AddEventListener pour le login qui indique que si on clique sur le login on est redirigé sur la page de connexion et que localstorage est vidé pour que l'on puisse reçevoir le nouveau token. */     
 login.addEventListener('click', () => {
    localStorage.clear();
    if(window.location.href = "index.html"){
@@ -142,7 +144,7 @@ login.addEventListener('click', () => {
  modifier.innerText = "modifier";
  icon1.classList.add("fa-regular");
  icon1.classList.add("fa-pen-to-square");         
-         
+/*---------------------------------Information sur le comportement de la page selon que l'on soit connecté ou non-------------*/         
 if(localStorage.getItem("token")){
    const login = document.getElementById("log");
    modifi.classList.remove("hidden1");
@@ -152,7 +154,7 @@ if(localStorage.getItem("token")){
    login.textContent = "login";
       } 
       
-    /*---------------------Création de la modale------------------------*/
+/*-----------------------------Création de la modale----------------------------*/
     modale.classList.toggle('hidden1');
     modale2.innerHTML += `
     <div id="modalConteneur1">
@@ -162,7 +164,7 @@ if(localStorage.getItem("token")){
     <div class="boutonModal"><button id="btn2" onclick="ajoutDePhoto()">Ajouter une photo</button></div>
     </div>
     `
-/*Fonction qui permet de voir le formulaire qui ajoute une image*/
+/*Fonction qui permet de voir le formulaire qui ajoute ou efface un projet.*/ 
 
 const ajoutDePhoto = () => {
    const partie1 = document.getElementById("modalConteneur1");
@@ -173,7 +175,7 @@ const ajoutDePhoto = () => {
                <p class="pointeur" id="previous"><i class="fa-solid fa-arrow-left"></i></p>
                <p class="pointeur" id="close">&times;</p>
             </div>
-            <form action="http://localhost:5678/api/works/post" method="POST" enctype="multipart/form-data">
+            <form>
                <p id="ajoutPhoto">Ajout photo</p>
                <div id="ajoutImage">
                   <i class="fa-regular fa-image"></i>
@@ -212,8 +214,10 @@ const previous = document.getElementById("previous");
          const closeModal = document.getElementById("p1");
          fermeture(closeModal);
       });
+
+//Ces événements addEventListener déclenchent le téléchargement de la photo et la soumission du formulaire.
 const form = document.querySelector("form");
-   form.addEventListener("submit", AjoutContenu);
+   form.addEventListener("submit", ajoutContenu);
 const photo = document.getElementById('button1');
    photo.addEventListener('click', photo2)
    }
@@ -232,67 +236,84 @@ icon1.addEventListener('click', () => {
     
 const closeModal = document.getElementById("p1");
    fermeture(closeModal);
- 
-function delete1(e){
-   const f = document.querySelectorAll(".gallery figure");
-   e.target.parentElement.remove();
-      for(let i = 0; i < f.length; i++){
-         if(e.target.parentElement.className === f[i].className){
-            f[i].remove();
-         }
-      }
-      fetch("http://localhost:5678/api/works/" + e.target.parentElement.className, {
-         method: "DELETE",
-         headers: {Authorization: "Bearer " + localStorage.getItem("token")},
-      }).then(response => response.json()).then(data => {
-         for(let i = 0; i < data.length; i++){
-            if(e.target.parentElement.className === data[i].id){
-               data[i].remove();
-            }
-           
-         }
-            
-      }).catch(err => console.log('L\'élément sélectionné à été efface'))
+//La fonction Delete de l'Api qui sert à effacer les projets. 
+
+async function delete1(e) {
+   fetch(`http://localhost:5678/api/works/${e.target.parentElement.className}`, {
+       method: "DELETE",
+       headers: {
+           "Accept": "application/json",
+           "Authorization": "Bearer " + localStorage.getItem("token"),
+       }
+   })
+   .then(response => {
+       if (!response.ok) {
+           throw new Error("La requête a échoué avec le statut : " + response.status)
+       }else{
+           location.reload; 
+           alert(`Le projet no: ${e.target.parentElement.className} à bien été effacé`);
+       }   
+   })
+   .catch(error => {
+       console.log("Une erreur s'est produite lors de la tentative pour effacer le projet");
+   })
 }
-      
+
+// La fonction photo2 qui permet d'uploader l'image depuis mon pc.     
 function photo2(){
    const input = document.getElementById("update");
-   const conteneur = document.getElementById("ajoutImage");
-   const button1 = document.querySelector("#ajoutImage label");
-      button1.textContent = "Cliquez ici!";
-      button1.addEventListener("click", () =>{
+   input.addEventListener("change", (e) => {
+      const fichier = input.files[0];
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+         const url = reader.result;
+         const conteneur = document.getElementById("ajoutImage");
          document.querySelector("#ajoutImage i").remove();
          document.getElementById("pinfo").remove();
          document.querySelector("#ajoutImage label").remove();
          const img = document.createElement("img");
-         img.src = URL.createObjectURL(input.files[0]);
+         img.src = url;
          img.alt = "image";
          img.classList.add('imageConteneur');
          conteneur.appendChild(img);
-         input.disabled = true;
-      })
-}
+      });
+     reader.readAsDataURL(fichier);
+});
       
-async function AjoutContenu(e){
+}
+//La fonction qui permet de faire un post et ajouter un projet à la gallery.   
+async function ajoutContenu(e){
    e.preventDefault();
-   const form = document.querySelector("form");
-   const img = document.querySelector("#ajoutImage img");
-   const input = document.getElementById("update");
-   const inputValue1 = document.getElementById("titleInput").value;
-   const inputValue2 = document.querySelector("#categoryInput").value;
-   const formData = new FormData();
-   const imgFormat = new Blob([JSON.stringify(img)], { type: "application/octet-binary" });
-  // formData.append('image', input.files[0], "image.jpeg");
-   formData.append('image', imgFormat);
-   formData.append('title', inputValue1);
-   formData.append('category', inputValue2);
-     await fetch("http://localhost:5678/api/works/", {
+   let input = document.getElementById("update");
+   let inputValue1 = document.getElementById("titleInput").value;
+   let inputValue2 = document.querySelector("#categoryInput").value;
+   let formData = new FormData();
+   formData.append("image", input.files[0]);
+   formData.append("title", inputValue1);
+   formData.append("category", inputValue2);
+      
+      await fetch("http://localhost:5678/api/works", {
          method: "POST",
-         headers: {"accept" : "application/json", Authorization : "Bearer " + localStorage.getItem("token"), "Content-Type" : "multipart/form-data"},
+         headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            Accept: "application/json",
+          },
          body: formData,
-      } 
-      ).then(response => response.json()).then(data => console.log(data))
-
-   }
+        })
+          .then((response) => {
+            if(response.ok) {
+               location.reload;
+               alert("Le nouveau projet a bien");
+              return response.json();
+            } else {
+              console.log("Une erreur s'est produite dans le dépôt du projet");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      };
+      
+window.addEventListener("beforeunload", () => localStorage.clear());
 
          
