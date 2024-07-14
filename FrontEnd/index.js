@@ -111,6 +111,7 @@ function recharge(){
       for(let i = 0; i < element1.length; i++){
          element1[i].addEventListener("click", delete1);
       }
+      
    })
 }
 //Foction de fermeture de la modale par le clique de l'icon de fermeture.
@@ -143,7 +144,9 @@ login.addEventListener('click', () => {
  modifi.appendChild(modifier);
  modifier.innerText = "modifier";
  icon1.classList.add("fa-regular");
- icon1.classList.add("fa-pen-to-square");         
+ icon1.classList.add("fa-pen-to-square");  
+ icon1.classList.add("modif");
+ modifier.classList.add("modif");      
 /*---------------------------------Information sur le comportement de la page selon que l'on soit connecté ou non-------------*/         
 if(localStorage.getItem("token")){
    const login = document.getElementById("log");
@@ -228,12 +231,15 @@ const close = document.getElementById("close");
    }
 }
 //Un événement qui est provoqué en cliquant et qui permet d'ouvrir la modale.
-icon1.addEventListener('click', () => {
-   modale.classList.remove('hidden1');
-   modale2.classList.remove('hidden1');
-   recharge();
-});
-    
+const modif = document.querySelectorAll(".modif");
+   for(let i = 0; i < modif.length; i++){
+      modif[i].addEventListener('click', () => {
+         modale.classList.remove('hidden1');
+         modale2.classList.remove('hidden1');
+         recharge()
+   });
+   }
+   
 const closeModal = document.getElementById("p1");
    fermeture(closeModal);
 //La fonction Delete de l'Api qui sert à effacer les projets. 
@@ -250,8 +256,25 @@ async function delete1(e) {
        if (!response.ok) {
            throw new Error("La requête a échoué avec le statut : " + response.status)
        }else{
-           location.reload(); 
-           alert(`Le projet no: ${e.target.parentElement.className} à bien été effacé`);
+         const figure = document.querySelectorAll("#portfolio .gallery figure");  
+            if(figure){
+               for(let i = 0; i < figure.length; i++){
+                  if(figure[i].className === e.target.parentElement.className){
+                     figure[i].remove();
+                     break;
+                  }
+               }
+            }
+         const figure2 = document.querySelectorAll("#gallery2 > div");
+            if(figure2){
+               for(let i = 0; i < figure2.length; i++){
+                  if(figure2[i].className === e.target.parentElement.className){
+                     figure2[i].remove();
+                     break;
+                  }
+               }
+            }
+         
        }   
    })
    .catch(error => {
@@ -297,14 +320,12 @@ async function ajoutContenu(e){
          headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
             Accept: "application/json",
-          },
+         },
          body: formData,
         })
           .then((response) => {
             if(response.ok) {
-               location.reload();
-               alert("Le nouveau projet a bien");
-              return response.json();
+               return response.json();
             } else {
               console.log("Une erreur s'est produite dans le dépôt du projet");
             }
@@ -312,8 +333,28 @@ async function ajoutContenu(e){
           .catch((error) => {
             console.log(error);
           });
+           
+          
+             
       };
       
-
-
+     /* const figure2 = document.querySelectorAll("#gallery2 > div");
+      const figure = document.querySelectorAll("#portfolio .gallery figure"); 
+      const ajouter = `
+      <div>
+         <span class="deleteR">&#x1F5D1;</span>
+         <img src= "${input.files[0]}" alt= "${inputValue1}" />
+      </div>`;
+      if(figure2){
+         figure2.push(ajouter);
+      } 
+      const ajouter2 = `
+      <figure>
+         <img src="${input.files[0]}" alt="k" />
+         <figcaption>${inputValue1}</figcaption>
+      </figure>
+      `
+      if(figure){
+         figure.push(ajouter2); 
+      }*/
          
