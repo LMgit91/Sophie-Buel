@@ -286,7 +286,9 @@ footer nav ul {
 #mod i{
 	cursor: pointer;
 }
-
+#mod p{
+	cursor: pointer;
+}
 #modale{
 	position: fixed;
 	background-color: rgba(0, 0, 0, 0.5);
@@ -359,7 +361,7 @@ footer nav ul {
 }
 
 #gallery2 i{
-	position: relative;
+	position: absolute;
 	color: white;
 	background-color: black;
 	padding: 3px;
@@ -367,6 +369,7 @@ footer nav ul {
 	top: 23px;
 	font-size: 10px;
 	cursor: pointer;
+	
 }
 
 #modalConteneur2 form{
@@ -478,4 +481,9 @@ footer nav ul {
 	margin-top: 0;
 	margin-bottom: 0;
 	object-fit: cover;
+}
+@media (max-width: 1500px){
+	#gallery2 span {
+		left: 48px;
+}
 }
