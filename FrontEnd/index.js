@@ -100,26 +100,27 @@ function recharge(){
             if(gallery2){
                gallery2.innerHTML += `
                 <div class="${item.id}">
-                 <span class="deleteR">&#x1F5D1;</span>
-                 <img src= "${item.imageUrl}" alt= "${item.title}" />
+                  <i class="fa-solid fa-trash"></i>
+                  <img src= "${item.imageUrl}" alt= "${item.title}" />
                 </div>
                 `;
       
             }
          });
-      const element1 = document.querySelectorAll(".deleteR");
+      const element1 = document.querySelectorAll("#gallery2 i");
       for(let i = 0; i < element1.length; i++){
          element1[i].addEventListener("click", delete1);
       }
       
    })
+   const add = document.getElementById("p1");
 }
 //Foction de fermeture de la modale par le clique de l'icon de fermeture.
 function fermeture(element){
    element.addEventListener("click", () => {
       const gallery2 = document.getElementById('gallery2');
          modale.classList.toggle('hidden1');
-         modale2.classList.toggle('hidden1');
+         modale2.classList.toggle('hidden1'); 
       if(gallery2){
          gallery2.innerHTML = "";  
          }
@@ -216,6 +217,10 @@ const previous = document.getElementById("previous");
          recharge();
          const closeModal = document.getElementById("p1");
          fermeture(closeModal);
+         const add = document.querySelector("#modalConteneur2 form p");
+         if(add){
+         add.textContent = "Ajout photo";
+         }
       });
 
 //Ces événements addEventListener déclenchent le téléchargement de la photo et la soumission du formulaire.
@@ -244,7 +249,7 @@ const closeModal = document.getElementById("p1");
    fermeture(closeModal);
 //La fonction Delete de l'Api qui sert à effacer les projets. 
 
-async function delete1(e) {
+function delete1(e) {
    fetch(`http://localhost:5678/api/works/${e.target.parentElement.className}`, {
        method: "DELETE",
        headers: {
@@ -256,6 +261,9 @@ async function delete1(e) {
        if (!response.ok) {
            throw new Error("La requête a échoué avec le statut : " + response.status)
        }else{
+         const add = document.getElementById("p2");
+         add.textContent = "Le projet a bien été effacé!";
+         add.style.color = "red";
          const figure = document.querySelectorAll("#portfolio .gallery figure");  
             if(figure){
                for(let i = 0; i < figure.length; i++){
@@ -325,6 +333,14 @@ async function ajoutContenu(e){
         })
           .then((response) => {
             if(response.ok) {
+               const g = document.querySelector(".gallery");
+               const add = document.querySelector("#modalConteneur2 form p");
+               add.textContent = "Le projet a bien été ajouter!"
+               add.style.color = "red"
+               g.innerHTML= "";
+               affichage();
+               inputValue2.value = "";
+               inputValue1.value = "";
                return response.json();
             } else {
               console.log("Une erreur s'est produite dans le dépôt du projet");
@@ -332,29 +348,6 @@ async function ajoutContenu(e){
           })
           .catch((error) => {
             console.log(error);
-          });
-           
-          
-             
+          });       
       };
       
-     /* const figure2 = document.querySelectorAll("#gallery2 > div");
-      const figure = document.querySelectorAll("#portfolio .gallery figure"); 
-      const ajouter = `
-      <div>
-         <span class="deleteR">&#x1F5D1;</span>
-         <img src= "${input.files[0]}" alt= "${inputValue1}" />
-      </div>`;
-      if(figure2){
-         figure2.push(ajouter);
-      } 
-      const ajouter2 = `
-      <figure>
-         <img src="${input.files[0]}" alt="k" />
-         <figcaption>${inputValue1}</figcaption>
-      </figure>
-      `
-      if(figure){
-         figure.push(ajouter2); 
-      }*/
-         
