@@ -30,7 +30,7 @@
         <label class="flex"for="email1">E-mail<input type="email" id="email1" name="email" required/></label>
         <label class="flex"for="password1">Mot de passe<input type="password" id="password1" name="password" minlength="6" required /></label>
         <div class="flex buttonMotdepasse">
-          <button class="btn1" id="btnConnect" onclick="loginAd2()" type="submit">Se connecter</button>
+          <button class="btn1" id="btnConnect" type="submit">Se connecter</button>
           <span id="mot">Mot de passe oublié</span>
         </div>
       </form>
@@ -38,9 +38,11 @@
   </main>
   <script> 
 const loginAd2 = async(e) => {
+  e.preventDefault();
   const email1 = document.getElementById('email1');
   const password1 = document.getElementById('password1');
   const modifi = document.getElementById('mod');
+    if(email1.value === "sophie.bluel@test.tld" && password1.value === "S0phie"){  
       fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: {"Content-Type": "application/json"}, 
@@ -49,14 +51,51 @@ const loginAd2 = async(e) => {
             if(data.token && data.userId){
               window.localStorage.setItem("token", data.token);
               window.location.href ="index.html";
-            }else if(email1.value === "" || password1.value === ""){
-              alert("Ces champs doivent remplis");
-            }else if(!data.token || !data.userId){
-              window.location.href = "login.html";
-              alert("Your email or password is wrong");
-            }  
+            }
+          }).catch((error) => console.log("Il y a eu un problème dans la requête de la ressource"));
+    }else if(email1.value === "" || password1.value === ""){
+      const page = document.querySelector(".loginStyle");
+      page.innerHTML += `<div class="modal-content" id="efface1">
+                          <p id="modalContant">Ces champs ne doivent pas etre vides</p>
+                          <p class="close1 pointeur">&times;</p>
+                        </div>`
+      const efface1 = document.getElementById("efface1");
+      const close1 = document.querySelector(".close1");
+                        
+        if(efface1 && close1){
+          close1.addEventListener("click", () => {
+            efface1.remove();
+            const submit = document.getElementById("btnConnect");
+              if(loginAd2){
+                submit.addEventListener("click", loginAd2);
+              }
           });
+        }
+    }else if(email1.value !== "sophie.bluel@test.tld" || password1.value !== "S0phie"){
+      const page = document.querySelector(".loginStyle");
+      page.innerHTML += `<div class="modal-content" id="efface3">
+                          <p >L'email ou le mot de passe sont érronés</p>
+                          <p class="close3 pointeur">&times;</p>
+                        </div>`
+      const efface3 = document.getElementById("efface3");
+      const close3 = document.querySelector(".close3");
+                        
+        if(efface3 && close3){
+          close3.addEventListener("click", () => {
+            efface3.remove();
+            const submit = document.getElementById("btnConnect");
+              if(loginAd2){
+                submit.addEventListener("click", loginAd2);
+              }
+          });
+        }
+
+    }
 }
+const submit = document.getElementById("btnConnect");
+  if(loginAd2){
+    submit.addEventListener("click", loginAd2);
+  }
 const login = document.getElementById("log");
 login.addEventListener('click', () => {
   localStorage.clear();
@@ -64,6 +103,15 @@ login.addEventListener('click', () => {
     window.location.href = "index.html";
   }
 });
-  </script> 
+
+const efface1 = document.getElementById("efface1");
+const close1 = document.querySelector(".close1");
+
+if(efface1 && close1){
+  close1.addEventListener("click", () => {
+    efface1.style.display = "none";
+  })
+}
+</script> 
 </body>
 </html>

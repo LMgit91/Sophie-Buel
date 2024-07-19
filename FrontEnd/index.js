@@ -164,6 +164,7 @@ if(localStorage.getItem("token")){
     <div id="modalConteneur1">
     <p id="p1" class="close">&times;</p>
     <p id="p2">Galerie photo</p>
+    <div id="mini2"></div>
     <div class="gallery2"><div id="gallery2"></div></div>
     <div class="boutonModal"><button id="btn2" onclick="ajoutDePhoto()">Ajouter une photo</button></div>
     </div>
@@ -179,6 +180,7 @@ const ajoutDePhoto = () => {
                <p class="pointeur" id="previous"><i class="fa-solid fa-arrow-left"></i></p>
                <p class="pointeur" id="close">&times;</p>
             </div>
+            <div id="mini"></div>
             <form>
                <p id="ajoutPhoto">Ajout photo</p>
                <div id="ajoutImage">
@@ -210,6 +212,7 @@ const previous = document.getElementById("previous");
                <div id="modalConteneur1"> 
                 <p id="p1">&times;</p>
                 <p id="p2">Galerie photo</p>
+                <div id="mini2"></div>
                 <div class="gallery2"><div id="gallery2"></div></div>
                 <div class="boutonModal"><button id="btn2" onclick="ajoutDePhoto()">Ajouter une photo</button></div>
                </div>
@@ -217,10 +220,7 @@ const previous = document.getElementById("previous");
          recharge();
          const closeModal = document.getElementById("p1");
          fermeture(closeModal);
-         const add = document.querySelector("#modalConteneur2 form p");
-         if(add){
-         add.textContent = "Ajout photo";
-         }
+         
       });
 
 //Ces événements addEventListener déclenchent le téléchargement de la photo et la soumission du formulaire.
@@ -261,10 +261,20 @@ function delete1(e) {
        if (!response.ok) {
            throw new Error("La requête a échoué avec le statut : " + response.status)
        }else{
-         const add = document.getElementById("p2");
-         add.textContent = "Le projet a bien été effacé!";
-         add.style.color = "red";
-         const figure = document.querySelectorAll("#portfolio .gallery figure");  
+         const figure = document.querySelectorAll("#portfolio2");
+         const page = document.getElementById("mini2");
+         page.innerHTML += `<div class="modal-content1" id="efface5">
+                              <p class="color1">Le projet a bien été effacé</p>
+                              <p class="close5 pointeur">&times;</p>
+                           </div>`;
+      const efface1 = document.getElementById("efface5");
+      const close1 = document.querySelector(".close5");
+               
+      if(efface1 && close1){
+         close1.addEventListener("click", () => {
+         efface1.remove();
+         });
+      }    
             if(figure){
                for(let i = 0; i < figure.length; i++){
                   if(figure[i].className === e.target.parentElement.className){
@@ -282,6 +292,7 @@ function delete1(e) {
                   }
                }
             }
+         
          
        }   
    })
@@ -333,21 +344,26 @@ async function ajoutContenu(e){
         })
           .then((response) => {
             if(response.ok) {
-               const g = document.querySelector(".gallery");
-               const add = document.querySelector("#modalConteneur2 form p");
-               add.textContent = "Le projet a bien été ajouter!"
-               add.style.color = "red"
-               g.innerHTML= "";
-               affichage();
-               inputValue2.value = "";
-               inputValue1.value = "";
+               const page = document.getElementById("mini");
+                  page.innerHTML += `<div class="modal-content1" id="efface4">
+                                       <p class="color1">Le projet a bien été ajouté</p>
+                                       <p class="close4 pointeur">&times;</p>
+                                    </div>`;
+               const efface1 = document.getElementById("efface4");
+               const close1 = document.querySelector(".close4");
+                        
+               if(efface1 && close1){
+                  close1.addEventListener("click", () => {
+                  efface1.remove();
+                  const form = document.querySelector("form");
+                  form.addEventListener("submit", ajoutContenu);
+                  });
+               };
                return response.json();
-            } else {
+            }else{
               console.log("Une erreur s'est produite dans le dépôt du projet");
-            }
-          })
-          .catch((error) => {
+         }
+         }).catch((error) => {
             console.log(error);
-          });       
-      };
-      
+          });
+}
