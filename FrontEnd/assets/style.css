@@ -464,14 +464,16 @@ footer nav ul {
 #update{
 	display: none;
 }
-#gallery2 span{
+
+#gallery2 i{
 	background-color: black;
 	position: relative;
-	left: 68px;
+	left: 65px;
 	top: 23px;
 	font-size: 15px;
 	cursor: pointer;
 	color: white;
+	font-size: 12px;
 }
 #ajoutImage .imageConteneur{
 	display: flex;
@@ -482,8 +484,44 @@ footer nav ul {
 	margin-bottom: 0;
 	object-fit: cover;
 }
-@media (max-width: 1500px){
-	#gallery2 span {
-		left: 48px;
+.modal-content{
+	background-color: white;
+	width: 35%;
+	height: 20px;
+	border-radius: 3px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
+.close1{
+	text-align: end;
+}
+#modalContant{
+	text-align: center;
+}
+.modal-content1{
+	background-color: rgb(179, 174, 174);
+	width: 90%;
+	height: 20px;
+	border-radius: 3px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+#mini{
+	display: flex;
+	justify-content: center;
+}
+.color1{
+	color: red;
+}
+#mini2{
+	display: flex;
+	justify-content: center;
+}
+@media (max-width: 1500px){
+	
+	#gallery2  i{
+		left: 45px;	
+	}
 }
